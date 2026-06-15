@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NEYREAL PAINTS— Paint Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --noir: #1A1410;
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --rose: #D4A5A5;
+    --warm-gray: #8C8078;
+    --card-bg: #FFFFFF;
+    --border: #E8E0D5;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--noir);
+    min-height: 100vh;
+  }
+
+  /* ── AUTH PAGE ── */
+  .auth-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--noir) 0%, #2d2220 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .auth-container.hidden {
+    display: none;
+  }
+  .auth-card {
+    background: white;
+    padding: 50px 40px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 30px 80px rgba(0,0,0,.4);
+  }
+  .auth-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--gold);
+  }
+  .auth-card p {
+    text-align: center;
+    color: var(--warm-gray);
+    margin-bottom: 24px;
+    font-size: 13px;
+  }
+  .auth-form {
+    display: none;
+  }
+  .auth-form.active {
+    display: block;
+  }
+  .auth-form h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--noir);
+  }
+  .auth-form input {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14px;
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .auth-form input:focus {
+    border-color: var(--gold);
+    background: white;
+    outline: none;
+  }
+  .auth-toggle {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--warm-gray);
+  }
+  .auth-toggle button {
+    width: auto;
+    background: none;
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    border: none;
+    text-decoration: underline;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--noir);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+  }
+  .nav-tabs { display: flex; gap: 6px; }
+  .nav-tab {
+    padding: 8px 22px;
+    border: 1px solid transparent;
+    background: none;
+    color: #aaa;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .25s;
+  }
+  .nav-tab:hover { color: var(--gold-light); border-color: #444; }
+  .nav-tab.active { background: var(--gold); color: var(--noir); font-weight: 500; border-color: var(--gold); }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--gold-light);
+    font-size: 13px;
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; padding: 50px 40px 80px; max-width: 1200px; margin: 0 auto; }
+  .page.active { display: block; animation: fadeUp .4s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+
+  /* ── SECTION HEADERS ── */
+  .section-header { margin-bottom: 36px; }
+  .section-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 46px;
+    font-weight: 300;
+    line-height: 1.1;
+  }
+  .section-header h1 em { font-style: italic; color: var(--gold); }
+  .section-header p { margin-top: 8px; color: var(--warm-gray); font-size: 14px; }
+  .divider { width: 60px; height: 1px; background: var(--gold); margin: 16px 0; }
+
+  /* ── ADMIN UPLOAD FORM ── */
+  .upload-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    max-width: 680px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    font-weight: 500;
+  }
+  input, select, textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--cream);
+    color: var(--noir);
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .image-drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+    background: var(--cream);
+    position: relative;
+  }
+  .image-drop-zone:hover { border-color: var(--gold); background: #fdf8f0; }
+  .image-drop-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .drop-icon { font-size: 36px; margin-bottom: 12px; }
+  .drop-text { font-size: 13px; color: var(--warm-gray); }
+  .drop-text strong { color: var(--gold); }
+  .preview-strip { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .preview-strip img { width: 72px; height: 72px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); }
+
+  .btn {
+    padding: 13px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+  .btn-gold { background: var(--gold); color: var(--noir); }
+  .btn-gold:hover { background: #b8973d; }
+  .btn-outline { background: none; border: 1px solid var(--noir); color: var(--noir); }
+  .btn-outline:hover { background: var(--noir); color: white; }
+  .btn-danger { background: none; border: 1px solid #c0392b; color: #c0392b; font-size: 11px; padding: 7px 14px; }
+  .btn-danger:hover { background: #c0392b; color: white; }
+
+  /* ── ADMIN LISTINGS TABLE ── */
+  .admin-list { margin-top: 50px; }
+  .admin-list h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+  .items-table { width: 100%; border-collapse: collapse; }
+  .items-table th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+  .items-table td { padding: 14px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; background: white; }
+  .items-table img { width: 54px; height: 54px; object-fit: cover; border-radius: 3px; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .5px;
+  }
+  .badge-available { background: #e8f5e9; color: #2e7d32; }
+  .badge-sold { background: #fce4ec; color: #c62828; }
+
+  /* ── USERS TABLE ── */
+  .users-section { margin-top: 50px; }
+  .users-table { width: 100%; border-collapse: collapse; }
+  .users-table th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+  .users-table td { padding: 14px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; background: white; }
+
+  /* ── STORE GRID ── */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    align-items: center;
+  }
+  .filter-btn {
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    color: var(--warm-gray);
+    transition: all .2s;
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--noir); color: white; border-color: var(--noir); }
+  .search-input-wrap { margin-left: auto; }
+  .search-input-wrap input { width: 200px; background: white; }
+
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 28px;
+  }
+  .product-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+  }
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,.10); }
+  .product-card:hover .card-overlay { opacity: 1; }
+  .card-img-wrap { position: relative; aspect-ratio: 3/4; overflow: hidden; background: #f5f0ea; }
+  .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .product-card:hover .card-img-wrap img { transform: scale(1.04); }
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26,20,16,.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .25s;
+    color: white;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .card-body { padding: 18px 18px 20px; }
+  .card-category { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 5px; }
+  .card-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+  .card-price { font-size: 18px; font-weight: 500; color: var(--gold); }
+  .card-stock { font-size: 12px; color: var(--warm-gray); margin-top: 4px; }
+  .sold-ribbon {
+    position: absolute;
+    top: 14px; right: -28px;
+    background: #c62828;
+    color: white;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 5px 36px;
+    transform: rotate(45deg);
+    text-transform: uppercase;
+  }
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--warm-gray); }
+  .empty-state .empty-icon { font-size: 52px; margin-bottom: 16px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,20,16,.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: white;
+    border-radius: 6px;
+    max-width: 780px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transform: translateY(20px);
+    transition: transform .3s;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-gallery { position: relative; background: #f5f0ea; min-height: 400px; }
+  .modal-gallery img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .modal-body { padding: 40px 36px; display: flex; flex-direction: column; gap: 16px; }
+  .modal-category { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); }
+  .modal-name { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; line-height: 1.2; }
+  .modal-price { font-size: 28px; font-weight: 500; color: var(--gold); }
+  .modal-desc { font-size: 14px; color: var(--warm-gray); line-height: 1.7; }
+  .modal-divider { height: 1px; background: var(--border); }
+  .modal-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 6px; font-weight: 500; }
+  .size-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+  .size-chip {
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    background: white;
+  }
+  .size-chip:hover, .size-chip.selected { background: var(--noir); color: white; border-color: var(--noir); }
+  .qty-row { display: flex; align-items: center; gap: 14px; }
+  .qty-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    background: none;
+    border-radius: 2px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    line-height: 1;
+  }
+  .qty-btn:hover { background: var(--noir); color: white; border-color: var(--noir); }
+  .qty-display { font-size: 18px; font-weight: 500; min-width: 28px; text-align: center; }
+  .total-line { display: flex; justify-content: space-between; align-items: center; background: var(--cream); padding: 14px 18px; border-radius: 3px; }
+  .total-label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--warm-gray); }
+  .total-amount { font-size: 22px; font-weight: 500; color: var(--noir); }
+  .close-btn {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(0,0,0,.5);
+    color: white; border: none;
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; line-height: 1;
+  }
+
+  /* ── BOOKINGS PAGE ── */
+  .bookings-grid { display: grid; gap: 16px; }
+  .booking-row {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 60px 1fr auto auto;
+    align-items: center;
+    gap: 20px;
+  }
+  .booking-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 3px; }
+  .booking-info h4 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .booking-info p { font-size: 13px; color: var(--warm-gray); }
+  .booking-total { font-size: 20px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+  .booking-status { font-size: 11px; letter-spacing: 1px; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .status-pending { background: #fff8e1; color: #e65100; }
+  .status-confirmed { background: #e8f5e9; color: #2e7d32; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: var(--noir);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 4px;
+    font-size: 13px;
+    border-left: 3px solid var(--gold);
+    z-index: 2000;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s;
+  }
+  .toast.show { transform: none; opacity: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--noir);
+    color: var(--warm-gray);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 680px) {
+    .modal { grid-template-columns: 1fr; }
+    .modal-gallery { min-height: 280px; }
+    .form-row { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; }
+    .logo { font-size: 18px; }
+    .page { padding: 30px 16px 60px; }
+    .booking-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ AUTH PAGE ════ -->
+<div class="auth-container" id="authContainer">
+  <div class="auth-card">
+    <h2>NEYREAL PAINTS</h2>
+    <p>Paint Hub</p>
+
+    <!-- LOGIN FORM -->
+    <div class="auth-form active" id="loginForm">
+      <h3>Login</h3>
+      <input type="email" id="loginEmail" placeholder="Email address"/>
+      <input type="password" id="loginPassword" placeholder="Password"/>
+      <button class="btn btn-gold" style="width:100%" onclick="handleLogin()">Login</button>
+      <div class="auth-toggle">
+        Don't have an account? <button onclick="toggleAuthForm()">Sign up</button>
+      </div>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="auth-form" id="signupForm">
+      <h3>Create Account</h3>
+      <input type="text" id="signupName" placeholder="Full name"/>
+      <input type="email" id="signupEmail" placeholder="Email address"/>
+      <input type="password" id="signupPassword" placeholder="Password"/>
+      <input type="text" id="signupLocation" placeholder="Location (City, Country)"/>
+      <button class="btn btn-gold" style="width:100%" onclick="handleSignup()">Sign Up</button>
+      <div class="auth-toggle">
+        Already have an account? <button onclick="toggleAuthForm()">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MAIN APP ════ -->
+<div id="mainContainer" style="display:none">
+<nav>
+  <div class="logo">NEYREAL PAINTS</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showPage('store')">🛍 Shop</button>
+    <button class="nav-tab" onclick="showPage('bookings')">📋 Bookings</button>
+    <button class="nav-tab" id="adminTab" onclick="showPage('admin')" style="display:none">🔒 Admin</button>
+  </div>
+  <div class="nav-right">
+    <span id="userDisplay"></span>
+    <button class="btn btn-outline" style="padding:6px 14px;font-size:11px" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ════ HOME PAGE ════ -->
+<div class="page active" id="page-home">
+  <div class="section-header">
+    <h1>Welcome to <em>NEYREAL PAINTS</em></h1>
+    <div class="divider"></div>
+    <p>Discover our exclusive collection of top notch quality paints and related materials you can ever find</p>
+  </div>
+  <div style="background: white; border: 1px solid var(--border); border-radius: 4px; padding: 60px 40px; text-align: center; max-width: 800px; margin: 0 auto;">
+    <p style="font-size: 18px; line-height: 1.8; color: var(--noir); margin-bottom: 24px;">
+      Welcome to your personal paints and related materials hub. Browse our curated collection of quality paint colors, designs, sizes and more. 
+      Every piece is selected to help you express your unique style and taste.
+    </p>
+    <button class="btn btn-gold" onclick="showPage('store')" style="margin-right: 12px;">Browse Shop</button>
+    <button class="btn btn-outline" onclick="showPage('bookings')">View Bookings</button>
+  </div>
+</div>
+
+<!-- ════ STORE PAGE ════ -->
+<div class="page" id="page-store">
+  <div class="section-header">
+    <h1>Our <em>Collection</em></h1>
+    <div class="divider"></div>
+    <p>Click any item to book your order instantly.</p>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Painnt Colours', this)">Paint Colours</button>
+    <button class="filter-btn" onclick="setFilter('Paint Designs', this)">Paint Designs</button>
+    <button class="filter-btn" onclick="setFilter('Paint Materials', this)">Paint Materials</button>
+    <button class="filter-btn" onclick="setFilter('Painters', this)">Painters</button>
+    <button class="filter-btn" onclick="setFilter('Paint Chemicals', this)">Paint Chemicals</button>
+    <div class="search-input-wrap">
+      <input type="text" placeholder="Search items…" oninput="searchItems(this.value)" id="searchBox"/>
+    </div>
+  </div>
+
+  <div class="store-grid" id="storeGrid"></div>
+</div>
+
+<!-- ════ BOOKINGS PAGE ════ -->
+<div class="page" id="page-bookings">
+  <div class="section-header">
+    <h1>My <em>Bookings</em></h1>
+    <div class="divider"></div>
+    <p>Your booking orders appear here.</p>
+  </div>
+  <div class="bookings-grid" id="bookingsList"></div>
+</div>
+
+<!-- ════ ADMIN PAGE ════ -->
+<div class="page" id="page-admin">
+  <div class="section-header">
+    <h1>Admin <em>Dashboard</em></h1>
+    <div class="divider"></div>
+    <p>Manage inventory and view customers.</p>
+  </div>
+
+  <div class="upload-card">
+    <h3 style="margin-bottom:20px;font-family:'Cormorant Garamond';font-size:22px">Add New Item</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Item Name</label>
+        <input type="text" id="itemName" placeholder="e.g. Gold Screed Paint"/>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="itemCategory">
+          <option value="">Select category</option>
+          <option>Paint Colours</option>
+          <option>Paint Designs</option>
+          <option>Paint Materials</option>
+          <option>Paiters</option>
+          <option>Paint Chemicals</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Price (N)</label>
+        <input type="number" id="itemPrice" placeholder="e.g. N850 (naira)" min="0"/>
+      </div>
+      <div class="form-group">
+        <label>Stock Quantity</label>
+        <input type="number" id="itemStock" placeholder="e.g. 10" min="1"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Available Amounts (comma separated)</label>
+        <input type="text" id="itemSizes" placeholder="10litres, 15litres, 20litres, etc"/>
+      </div>
+      <div class="form-group">
+        <label>Colour</label>
+        <input type="text" id="itemColour" placeholder="e.g. Black, Ivory"/>
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="itemDesc" placeholder="Brief description of the item…"></textarea>
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
+        <label>Photos</label>
+        <div class="image-drop-zone" id="dropZone">
+          <input type="file" accept="image/*" multiple id="imageInput" onchange="previewImages(this)"/>
+          <div class="drop-icon">📷</div>
+          <div class="drop-text">Click or drag to upload photos<br/><strong>Multiple images allowed</strong></div>
+          <div class="preview-strip" id="previewStrip"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:8px;">
+      <button class="btn btn-gold" onclick="saveItem()">Publish Item</button>
+      <button class="btn btn-outline" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div class="admin-list">
+    <h2>Inventory</h2>
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="adminTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Customers Table -->
+  <div class="users-section">
+    <h2>Registered Customers</h2>
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ PRODUCT MODAL ════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-gallery" id="modalGallery">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+// ── AUTH STATE ──
+let currentUser = null;
+let isAdmin = false;
+let users = JSON.parse(localStorage.getItem('painthub_users') || '[]');
+let items = JSON.parse(localStorage.getItem('Neyreal_items') || '[]');
+let bookings = JSON.parse(localStorage.getItem('Neyreal_bookings') || '[]');
+let pendingImages = [];
+let currentFilter = 'all';
+let currentSearch = '';
+let currentItem = null;
+let selectedSize = '';
+let qty = 1;
+
+const ADMIN_EMAIL = 'neyrealpaint@gmail.com';
+const ADMIN_PASSWORD = 'neyreal';
+
+// ── PAGE INIT ──
+window.addEventListener('load', () => {
+  const savedUser = localStorage.getItem('painthub_currentUser');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    isAdmin = currentUser.role === 'admin';
+    showApp();
+  }
+});
+
+// ── AUTH UI ──
+function showApp() {
+  document.getElementById('authContainer').classList.add('hidden');
+  document.getElementById('mainContainer').style.display = 'block';
+  updateNavbar();
+  if (isAdmin) {
+    document.getElementById('adminTab').style.display = 'inline-block';
+    renderAdminTable();
+    renderAdminDashboard();
+  }
+  renderStore();
+}
+
+function toggleAuthForm() {
+  document.getElementById('loginForm').classList.toggle('active');
+  document.getElementById('signupForm').classList.toggle('active');
+}
+
+// ── LOGIN ──
+function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email || !password) {
+    showToast('Please fill in all fields');
+    return;
+  }
+
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    currentUser = { name: 'Admin', email: ADMIN_EMAIL, role: 'admin' };
+    isAdmin = true;
+    localStorage.setItem('painthub_currentUser', JSON.stringify(currentUser));
+    showApp();
+    showToast('✓ Admin login successful');
+  } else {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+      currentUser = { name: user.name, email: user.email, role: 'customer' };
+      isAdmin = false;
+      localStorage.setItem('painthub_currentUser', JSON.stringify(currentUser));
+      showApp();
+      showToast('✓ Login successful');
+    } else {
+      showToast('❌ Invalid email or password');
+    }
+  }
+
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+// ── SIGNUP ──
+function handleSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const location = document.getElementById('signupLocation').value.trim();
+
+  if (!name || !email || !password || !location) {
+    showToast('Please fill in all fields');
+    return;
+  }
+
+  if (users.find(u => u.email === email)) {
+    showToast('❌ Email already registered');
+    return;
+  }
+
+  users.push({ email, password, name, location, role: 'customer', createdAt: new Date().toLocaleDateString() });
+  localStorage.setItem('painthub_users', JSON.stringify(users));
+
+  currentUser = { name, email, role: 'customer' };
+  isAdmin =false;
+  localStorage.setItem('painthub_currentUser', JSON.stringify(currentUser));
+  showApp();
+  showToast('✓ Account created and logged in');
+}
+
+// ── LOGOUT ──
+function logout() {
+  if (confirm('Are you sure you want to logout?')) {
+    currentUser = null;
+    isAdmin = false;
+    localStorage.removeItem('painthub_currentUser');
+    document.getElementById('authContainer').classList.remove('hidden');
+    document.getElementById('mainContainer').style.display = 'none';
+    document.getElementById('adminTab').style.display = 'none';
+    showToast('Logged out');
+  }
+}
+
+// ── NAVBAR ──
+function updateNavbar() {
+  document.getElementById('userDisplay').textContent = currentUser.name + (isAdmin ? ' (Admin)' : '');
+}
+
+// ── PAGE NAV ──
+function showPage(id) {
+  if (!isAdmin && id === 'admin') {
+    showToast('Admin only');
+    return;
+  }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'store') renderStore();
+  if (id === 'bookings') renderBookings();
+  if (id === 'admin') { renderAdminTable(); renderAdminDashboard(); }
+}
+
+// ── IMAGE PREVIEW ──
+function previewImages(input) {
+  const strip = document.getElementById('previewStrip');
+  strip.innerHTML = '';
+  pendingImages = [];
+  const files = Array.from(input.files);
+  files.forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      pendingImages.push(e.target.result);
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      strip.appendChild(img);
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+// ── SAVE ITEM ──
+function saveItem() {
+  const name = document.getElementById('itemName').value.trim();
+  const category = document.getElementById('itemCategory').value;
+  const price = parseFloat(document.getElementById('itemPrice').value);
+  const stock = parseInt(document.getElementById('itemStock').value);
+  const sizes = document.getElementById('itemSizes').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const colour = document.getElementById('itemColour').value.trim();
+  const desc = document.getElementById('itemDesc').value.trim();
+
+  if (!name || !category || !price || !stock) {
+    showToast('Please fill in all required fields.'); return;
+  }
+  if (pendingImages.length === 0) {
+    showToast('Please upload at least one photo.'); return;
+  }
+
+  const item = {
+    id: Date.now(),
+    name, category, price, stock, sizes, colour, desc,
+    images: pendingImages,
+    available: true,
+    createdAt: new Date().toLocaleDateString()
+  };
+  items.push(item);
+  saveItems();
+  renderAdminTable();
+  clearForm();
+  showToast('✓ Item published to the store!');
+}
+
+function clearForm() {
+  ['itemName','itemPrice','itemStock','itemSizes','itemColour','itemDesc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemCategory').value = '';
+  document.getElementById('previewStrip').innerHTML = '';
+  document.getElementById('imageInput').value = '';
+  pendingImages = [];
+}
+
+// ── ADMIN TABLE ──
+function renderAdminTable() {
+  const tbody = document.getElementById('adminTableBody');
+  if (items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--warm-gray)">No items yet. Upload your first item above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(item => `
+    <tr>
+      <td><img src="${item.images[0]}" alt="${item.name}"/></td>
+      <td><strong>${item.name}</strong><br/><span style="font-size:12px;color:var(--warm-gray)">${item.colour||''}</span></td>
+      <td>${item.category}</td>
+      <td><strong>R${item.price.toFixed(2)}</strong></td>
+      <td>${item.stock}</td>
+      <td><span class="badge ${item.available ? 'badge-available':'badge-sold'}">${item.available?'Available':'Sold Out'}</span></td>
+      <td style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-outline" style="font-size:11px;padding:7px 12px" onclick="toggleAvail(${item.id})">${item.available?'Mark Sold':'Restore'}</button>
+        <button class="btn btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+// ── ADMIN DASHBOARD ──
+function renderAdminDashboard() {
+  const tbody = document.getElementById('usersTableBody');
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--warm-gray)">No registered customers yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(user => `
+    <tr>
+      <td><strong>${user.name}</strong></td>
+      <td>${user.email}</td>
+      <td>${user.location}</td>
+      <td>${user.createdAt}</td>
+      <td><button class="btn btn-danger" onclick="deleteUser('${user.email}')">Delete</button></td>
+    </tr>`).join('');
+}
+
+function deleteUser(email) {
+  if (!confirm('Delete this user?')) return;
+  users = users.filter(u => u.email !== email);
+  localStorage.setItem('painthub_users', JSON.stringify(users));
+  renderAdminDashboard();
+  showToast('User deleted');
+}
+
+function toggleAvail(id) {
+  const item = items.find(i => i.id === id);
+  if (item) { item.available = !item.available; saveItems(); renderAdminTable(); }
+}
+
+function deleteItem(id) {
+  if (!confirm('Delete this item?')) return;
+  items = items.filter(i => i.id !== id);
+  saveItems();
+  renderAdminTable();
+  showToast('Item deleted.');
+}
+
+// ── STORE ──
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderStore();
+}
+
+function searchItems(q) {
+  currentSearch = q.toLowerCase();
+  renderStore();
+}
+
+function renderStore() {
+  const grid = document.getElementById('storeGrid');
+  let filtered = items.filter(i => {
+    const matchCat = currentFilter === 'all' || i.category === currentFilter;
+    const matchQ = !currentSearch || i.name.toLowerCase().includes(currentSearch) || i.category.toLowerCase().includes(currentSearch);
+    return matchCat && matchQ;
+  });
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🧵</div><p>No items found. Check back soon!</p></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(item => `
+    <div class="product-card" onclick="openModal(${item.id})">
+      ${!item.available ? '<div class="sold-ribbon">Sold Out</div>' : ''}
+      <div class="card-img-wrap">
+        <img src="${item.images[0]}" alt="${item.name}" loading="lazy"/>
+        <div class="card-overlay">View & Book →</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${item.category}</div>
+        <div class="card-name">${item.name}</div>
+        <div class="card-price">R${item.price.toFixed(2)}</div>
+        <div class="card-stock">${item.available ? `${item.stock} in stock` : 'Sold out'}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── MODAL ──
+function openModal(id) {
+  currentItem = items.find(i => i.id === id);
+  if (!currentItem) return;
+  selectedSize = '';
+  qty = 1;
+
+  const gallery = document.getElementById('modalGallery');
+  gallery.innerHTML = `<button class="close-btn" onclick="closeModal()">✕</button>`;
+  const img = document.createElement('img');
+  img.src = currentItem.images[0];
+  img.alt = currentItem.name;
+  gallery.appendChild(img);
+
+  if (currentItem.images.length > 1) {
+    const strip = document.createElement('div');
+    strip.style = 'position:absolute;bottom:10px;left:0;right:0;display:flex;gap:6px;justify-content:center;';
+    currentItem.images.forEach((src, i) => {
+      const t = document.createElement('img');
+      t.src = src;
+      t.style = `width:42px;height:42px;object-fit:cover;border-radius:2px;cursor:pointer;border:2px solid ${i===0?'var(--gold)':'rgba(255,255,255,.5)'}`;
+      t.onclick = () => { img.src = src; strip.querySelectorAll('img').forEach((x,j) => x.style.borderColor = j===i ? 'var(--gold)' : 'rgba(255,255,255,.5)'); };
+      strip.appendChild(t);
+    });
+    gallery.appendChild(strip);
+  }
+
+  renderModalBody();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderModalBody() {
+  const item = currentItem;
+  const total = (item.price * qty).toFixed(2);
+  const sizesHTML = item.sizes.length ? `
+    <div>
+      <div class="modal-label">Size</div>
+      <div class="size-grid">
+        ${item.sizes.map(s => `<button class="size-chip ${selectedSize===s?'selected':''}" onclick="selectSize('${s}')">${s}</button>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-category">${item.category}</div>
+    <div class="modal-name">${item.name}</div>
+    <div class="modal-price">R${item.price.toFixed(2)}</div>
+    ${item.colour ? `<div style="font-size:13px;color:var(--warm-gray)">Colour: ${item.colour}</div>` : ''}
+    ${item.desc ? `<div class="modal-desc">${item.desc}</div>` : ''}
+    <div class="modal-divider"></div>
+    ${sizesHTML}
+    <div>
+      <div class="modal-label">Quantity <span style="font-weight:400;color:var(--warm-gray)">(${item.stock} available)</span></div>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-display" id="qtyDisplay">${qty}</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+    <div class="total-line">
+      <div class="total-label">Total</div>
+      <div class="total-amount" id="totalAmt">R${total}</div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-label">Confirm Details</div>
+    <div style="font-size:13px;color:var(--warm-gray);margin-bottom:16px">
+      <strong>Customer:</strong> ${currentUser.name}<br/>
+      <strong>Email:</strong> ${currentUser.email}
+    </div>
+    <textarea id="bkNote" placeholder="Any special notes…" style="min-height:60px;width:100%;padding:10px;border:1px solid var(--border);border-radius:3px;font-family:'DM Sans';background:var(--cream)"></textarea>
+    <div style="margin-top:16px"></div>
+    ${!item.available ? `<button class="btn" style="background:#ddd;color:#999;cursor:not-allowed;width:100%">Sold Out</button>` : `<button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="placeBooking()">Confirm Booking</button>`}
+  `;
+}
+
+function selectSize(s) { selectedSize = s; renderModalBody(); }
+
+function changeQty(delta) {
+  qty = Math.max(1, Math.min(currentItem.stock, qty + delta));
+  document.getElementById('qtyDisplay').textContent = qty;
+  document.getElementById('totalAmt').textContent = 'R' + (currentItem.price * qty).toFixed(2);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentItem = null;
+}
+
+function closeModalOnBg(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+// ── BOOKING ──
+function placeBooking() {
+  const note = document.getElementById('bkNote').value.trim();
+
+  const booking = {
+    id: Date.now(),
+    itemId: currentItem.id,
+    itemName: currentItem.name,
+    itemImage: currentItem.images[0],
+    category: currentItem.category,
+    size: selectedSize || 'N/A',
+    qty,
+    price: currentItem.price,
+    total: currentItem.price * qty,
+    customerName: currentUser.name,
+    customerEmail: currentUser.email,
+    note,
+    status: 'pending',
+    date: new Date().toLocaleDateString('en-ZA', { day:'2-digit', month:'short', year:'numeric' })
+  };
+  bookings.push(booking);
+  localStorage.setItem('paint_bookings', JSON.stringify(bookings));
+
+  currentItem.stock -= qty;
+  if (currentItem.stock <= 0) currentItem.available = false;
+  saveItems();
+
+  closeModal();
+  renderStore();
+  showToast('🎉 Booking confirmed! Check the Bookings tab.');
+}
+
+// ── BOOKINGS PAGE ──
+function renderBookings() {
+  const list = document.getElementById('bookingsList');
+  const userBookings = bookings.filter(b => b.customerEmail === currentUser.email);
+  
+  if (userBookings.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>No bookings yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = [...userBookings].reverse().map(b => `
+    <div class="booking-row">
+      <img src="${b.itemImage}" alt="${b.itemName}"/>
+      <div class="booking-info">
+        <h4>${b.itemName}</h4>
+        <p>${b.category} · Size: ${b.size} · Qty: ${b.qty}</p>
+        <p style="margin-top:4px"><strong>${b.customerName}</strong> · ${b.date}</p>
+        <p style="font-size:12px;color:#aaa;margin-top:2px">${b.note ? 'Note: '+b.note : 'No notes'}</p>
+      </div>
+      <div class="booking-total">R${b.total.toFixed(2)}</div>
+      <div>
+        <span class="booking-status ${b.status==='confirmed'?'status-confirmed':'status-pending'}">${b.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── HELPERS ──
+function saveItems() { localStorage.setItem('lumiere_items', JSON.stringify(items)); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+</script>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+  © 2026 NEYREAL PAINT. Created by David
+</footer>
+
+</body>
+</html>
